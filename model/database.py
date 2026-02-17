@@ -6,3 +6,5 @@ client=AsyncIOMotorClient(MONGO_URL)
 database=client.mydb
 
 user_collection=database.get_collection("users")
+
+post_collection=database.get_collection("posts")
