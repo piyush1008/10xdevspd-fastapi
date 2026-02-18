@@ -4,8 +4,11 @@ from model.database import user_collection
 from bson import ObjectId
 from model.database import post_collection
 from model.models import Post
-
+from passlib.context import CryptContext
+from utils.utils import verify_password, create_access_token
 app = FastAPI()
+
+pwd_context=CryptContext(schemes=["argon2"], deprecated="auto")
 
 # Helper to convert Mongo document
 def user_helper(user) -> dict:
@@ -28,7 +31,38 @@ def post_helper(post)->dict:
 async def healthcheck():
     return {"message": "OK"}
 
-# CREATE User
+
+#register user
+#register user
+@app.post("/signup")
+async def signup(user: User):
+    hashed_password=pwd_context.hash(user.password)
+    user_dict=user.dict()
+    user_dict['password']=hashed_password
+    result=await user_collection.insert_one(user_dict)
+    new_user=await user_collection.find_one({"_id":result.inserted_id})
+    return user_helper(new_user)
+
+#signin user
+@app.post("/signin")
+async def signin(user: User):
+    user_found=await user_collection.find_one({"username":user.username})
+    if not user_found:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    if not verify_password(user.password, user_found['password']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    access_token=create_access_token(data={"id":str(user_found["_id"])})
+    return {"access_token":access_token,"token_type":"bearer"}
+
+
+
+
+
+
+
+# create user
 @app.post("/users")
 async def create_user(user: User):
     result = await user_collection.insert_one(user.dict())

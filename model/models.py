@@ -3,8 +3,10 @@ from typing import Optional
 
 
 class User(BaseModel):
-    name: str = Field(..., min_length=3, max_length=50)
-    age: int = Field(..., ge=18, le=120)
+    username: str
+    password: str
+    name: Optional[str] = Field(..., min_length=3, max_length=50)
+    age: Optional[int] = Field(..., ge=18, le=120)
     email: Optional[str] = None
 
 
@@ -18,4 +20,3 @@ class Post(BaseModel):
 
 class PostResponse(Post):
     id: str
-
