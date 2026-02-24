@@ -1,5 +1,5 @@
-from passlib.context import CryptContext
-from jose import JWTError, jwt
+from passlib.context import CryptContext ## library for hashing and verify password
+from jose import JWTError, jwt  ## library for jwt token
 from datetime import datetime, timedelta
 import os
 SECRET_KEY=os.getenv("SECRET_KEY", "your_secret_key")

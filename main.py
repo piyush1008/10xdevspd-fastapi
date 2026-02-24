@@ -72,9 +72,12 @@ async def create_user(user: User):
 
 # GET All Users
 @app.get("/users")
-async def get_users():
+async def get_users(limit: int =10, skip: int = 0):
     users = []
-    async for user in user_collection.find():
+    # async for user in user_collection.find():
+    #     users.append(user_helper(user))
+    # return users
+    async for user in user_collection.find().limit(limit).skip(skip):
         users.append(user_helper(user))
     return users
 
