@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException,Path
 from model.models import User
 from model.database import user_collection
 from bson import ObjectId
@@ -6,6 +6,7 @@ from model.database import post_collection
 from model.models import Post
 from passlib.context import CryptContext
 from utils.utils import verify_password, create_access_token
+
 app = FastAPI()
 
 pwd_context=CryptContext(schemes=["argon2"], deprecated="auto")
@@ -56,12 +57,6 @@ async def signin(user: User):
     access_token=create_access_token(data={"id":str(user_found["_id"])})
     return {"access_token":access_token,"token_type":"bearer"}
 
-
-
-
-
-
-
 # create user
 @app.post("/users")
 async def create_user(user: User):
@@ -70,7 +65,7 @@ async def create_user(user: User):
     new_user = await user_collection.find_one({"_id": result.inserted_id})
     return user_helper(new_user)
 
-# GET All Users
+# GET All Users - GET /users/?limit=5&skip=2
 @app.get("/users")
 async def get_users(limit: int =10, skip: int = 0):
     users = []
@@ -83,7 +78,7 @@ async def get_users(limit: int =10, skip: int = 0):
 
 # GET User by ID
 @app.get("/users/{id}")
-async def get_user(id: str):
+async def get_user(id: str=Path(..., title="ID", description="ID of the user", example="63f1b9b9b9b9b9b9b9b9b9b9") ):
     user = await user_collection.find_one({"_id": ObjectId(id)})
     if user:
         return user_helper(user)
