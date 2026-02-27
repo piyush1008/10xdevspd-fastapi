@@ -1,11 +1,13 @@
-from pydantic import BaseModel
-from typing import List, Dict
+from pydantic import BaseModel, EmailStr, Field, Field_validator
+from typing import List, Dict, Optional, Annotated
 
 class User_info(BaseModel):
-    name: str
-    age:int
-    weight: float
-    married: bool
+    # name: str=Field(max_length=20)
+    name: Annotated[str, Field(max_length=50, title="Name of the patient", description="give the name of the patient in less than 20 char")]
+    age:int=Field(gt=0 , lt=20)
+    email: EmailStr
+    weight: Optional[float]=None
+    married: Annotated[boo, Field(default=None, description="Is the patient married or not")]
     alergics: List[str]
     contact: Dict[str, str]
 
