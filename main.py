@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException,Path
+from fastapi.response import JSONResponse
 from model.models import User
 from model.database import user_collection
 from bson import ObjectId
@@ -55,7 +56,8 @@ async def signin(user: User):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     access_token=create_access_token(data={"id":str(user_found["_id"])})
-    return {"access_token":access_token,"token_type":"bearer"}
+    # return {"access_token":access_token,"token_type":"bearer"}
+    return JSONResponse(content={"access_token":access_token,"token_type":"bearer"}, status_code=200)
 
 # create user
 @app.post("/users")
@@ -76,7 +78,7 @@ async def get_users(limit: int =10, skip: int = 0):
         users.append(user_helper(user))
     return users
 
-# GET User by ID
+# GET User by ID -- in this we are using path parameter .
 @app.get("/users/{id}")
 async def get_user(id: str=Path(..., title="ID", description="ID of the user", example="63f1b9b9b9b9b9b9b9b9b9b9") ):
     user = await user_collection.find_one({"_id": ObjectId(id)})
