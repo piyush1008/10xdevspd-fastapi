@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, Field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import List, Dict, Optional, Annotated
 
 class User_info(BaseModel):
@@ -7,7 +7,7 @@ class User_info(BaseModel):
     age:int=Field(gt=0 , lt=20)
     email: EmailStr
     weight: Optional[float]=None
-    married: Annotated[boo, Field(default=None, description="Is the patient married or not")]
+    married: Annotated[bool, Field(default=None, description="Is the patient married or not")]
     alergics: List[str]
     contact: Dict[str, str]
 

@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException,Path
-from fastapi.response import JSONResponse
+from fastapi.responses import JSONResponse
 from model.models import User
 from model.database import user_collection
 from bson import ObjectId
@@ -30,6 +30,11 @@ def post_helper(post)->dict:
     }
 
 @app.get("/")
+async def healthcheck():
+    return {"message": "The server is up"}
+
+
+@app.get("/healthCheck")
 async def healthcheck():
     return {"message": "OK"}
 

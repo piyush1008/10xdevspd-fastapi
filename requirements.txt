@@ -7,3 +7,4 @@ passlib[argon2]
 bcrypt
 argon2-cffi
 python-dotenv
+pydantic[email]

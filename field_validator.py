@@ -38,8 +38,7 @@ def user_info(user: User_info):
     return {"name":user.name, "age":user.age, "married":user.married}
 
 
-
-patient1={"name":"piyush", "email:"adc@gmail.com","age":21, "weight":70.5, "married":False, "alergics":["penicillin", "aspirin"], "contact":{"email":"piyush@gmail.com", "phone":"1234567890"}}
+patient1={"name":"piyush", "email":"adc@gmail.com","age":21, "weight":70.5, "married":False, "alergics":["penicillin", "aspirin"], "contact":{"email":"piyush@gmail.com", "phone":"1234567890"}}
 
 
 pat1=User_info(**patient1)
